@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  //get the canvas and set its width and height to the users screensize
+  const canvas = document.querySelector('#draw');
+  const ctx = canvas.getContext('2d'); // drawn on context (2d or 3d) not on html
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  // base settings for brush
+  ctx.strokeStyle = '#bada55';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+  ctx.globalCompostieOperation = 'multiply'; // blend modes when lines overlap
+
+  let isDrawing = false; // distinuguishes between mouse click  drawing or non click mouse moving (not drawing)
+  // needs x and y values bc drawing a line needs a start and end  point
+  let lastX =  0;
+  let lastY = 0;
+  let hue = 0;  // see mothereffinghsl.com  for hsl rainbow hue
+  let direction = true; // makes line width larger as mouse moves
+
+  // function is called whenever mouse is moved on canvas
+  function draw(e) {
+    if (!isDrawing) return; // stop function from running when mouse is not down
+    console.log(e);
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`; // hue, saturation, lightnesss
+    //  start a path that starts the line drawn but nothing is shown until stroke is run
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY); //start from
+    ctx.lineTo(e.offsetX, e.offsetY); //go to (these are in the mouse event (attributes?))
+    ctx.stroke();
+    // update lastX and lastY or else in always starts at 0 (lines 22 & 23)
+    // destructuring an array both in one line instead of lastX = e.offsetX;  lastY = e.lastY;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+    hue++; // increases hue to change hsl rainbow color
+    if (hue >= 360) {
+      hue  = 0; //360 is hsl max, reset to zero starts rainbow over
+    }
+    // flip direction so it gets smaller with these values
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      direction = !direction;
+    }
+
+    // if direction is true then increment line width with every loop else decriment it
+    if (direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
+  };
+
+  // listen for mouse move on canvas
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true; // a flag
+    // immediately at mousdown, which is before mouse move, update the last x and y so it starts there and not where it was, creating a new line not joined with old line
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+
+  });
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false); // when mouse leaves screen while down
+
+
+
+
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
