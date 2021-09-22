@@ -37,11 +37,20 @@ function handleRangeUpdate() {
     // console.log(this.value);
 }
 
+function handleProgress() {
+    // update flex-basis value which is in percentage
+    const percent = (video.currentTime / video.duration) * 100;
+    progressBar.style.flexBasis = `${percent}%`;
+}
+
 // hook up event listeners
 video.addEventListener('click', togglePlay); // clicking on screen, not control bar
 video.addEventListener('play', updateButton); // changing icon of button when played
 video.addEventListener('pause', updateButton); // changing icon of button when paused
+video.addEventListener('timeupdate', handleProgress); // updating progress slider time code
+
 toggle.addEventListener('click', togglePlay); // clicking on play in control bar
+
 skipButtons.forEach(button => button.addEventListener('click', skip));
 ranges.forEach(range => range.addEventListener('change', handleRangeUpdate)); // listen for all ranges changes (sliders)
 ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate)); // listen for all ranges changes (sliders)
