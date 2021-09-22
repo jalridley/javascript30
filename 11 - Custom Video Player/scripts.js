@@ -26,9 +26,22 @@ function updateButton() {
     toggle.textContent = icon;
 }
 
+function skip() {
+    // console.log(this.dataset.skip); // object containing the skip value
+    video.currentTime += parseFloat(this.dataset.skip); // convert the string to true number
+}
+
+function handleRangeUpdate() {
+    video[this.name] = this.value;
+    // console.log(this.name);
+    // console.log(this.value);
+}
+
 // hook up event listeners
 video.addEventListener('click', togglePlay); // clicking on screen, not control bar
 video.addEventListener('play', updateButton); // changing icon of button when played
 video.addEventListener('pause', updateButton); // changing icon of button when paused
-
 toggle.addEventListener('click', togglePlay); // clicking on play in control bar
+skipButtons.forEach(button => button.addEventListener('click', skip));
+ranges.forEach(range => range.addEventListener('change', handleRangeUpdate)); // listen for all ranges changes (sliders)
+ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate)); // listen for all ranges changes (sliders)
