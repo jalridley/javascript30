@@ -74,8 +74,26 @@
                 };
                 // push into array
                 items.push(item);
+                populateList(items, itemsList);
                 //  form element has a reset method to clear input box upon submit
                 this.reset();
+            }
+
+            function populateList(plates = [], platesList) {
+                // plate, index
+                platesList.innerHTML = plates
+                    .map((plate, i) => {
+                        // return html string so use back ticks
+                        return `
+                        <li>
+                            <input type="checkbox" data-index=${i} id="item${i}" ${
+                            plate.done ? 'checked' : ''
+                        } />
+                            <label for="item${i}">${plate.text}</label>
+                        </li> 
+                    `;
+                    })
+                    .join(''); // inner html needs to be a long string
             }
 
             addItems.addEventListener('submit', addItem);
