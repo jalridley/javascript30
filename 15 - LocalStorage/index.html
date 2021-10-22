@@ -61,7 +61,8 @@
         <script>
             const addItems = document.querySelector('.add-items');
             const itemsList = document.querySelector('.plates');
-            const items = [];
+            // on page load either the JSON object from  local  storage or a empty array
+            const items = JSON.parse(localStorage.getItem('items')) || [];
 
             function addItem(e) {
                 // prevent  page from reloading
@@ -75,6 +76,11 @@
                 // push into array
                 items.push(item);
                 populateList(items, itemsList);
+                // set array to local  storage so list stays on screen
+                // items is the key - inspector applications local storage
+                // can only use string as value in local storage - use JSON stringify
+                // to convert objects and arrays into JSON string equivalent
+                localStorage.setItem('items', JSON.stringify(items));
                 //  form element has a reset method to clear input box upon submit
                 this.reset();
             }
@@ -97,6 +103,9 @@
             }
 
             addItems.addEventListener('submit', addItem);
+
+            //  on page load
+            populateList(items, itemsList);
         </script>
     </body>
 </html>
