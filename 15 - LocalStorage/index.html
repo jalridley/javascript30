@@ -102,7 +102,22 @@
                     .join(''); // inner html needs to be a long string
             }
 
+            // to keep state of checked boxes as a taco emoji on page reload
+            function toggleDone(e) {
+                if (!e.target.matches('input')) return; // skip this unless it is an input
+                const el = e.target;
+                const index = el.dataset.index;
+                // change property - set index.done to the opposite of its current state of true or false
+                items[index].done = !items[index].done;
+                // store it in local storage
+                localStorage.setItem('items', JSON.stringify(items));
+                // visually update the page
+                populateList(items, itemsList);
+            }
+
             addItems.addEventListener('submit', addItem);
+            // listen for click on ul for checkbox
+            itemsList.addEventListener('click', toggleDone);
 
             //  on page load
             populateList(items, itemsList);
