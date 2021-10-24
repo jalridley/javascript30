@@ -33,6 +33,41 @@
             }
         </style>
 
-        <script></script>
+        <script>
+            const hero = document.querySelector('.hero');
+            const text = hero.querySelector('h1');
+            // shadow "walk"
+            const walk = 100; // 100px
+
+            function shadow(e) {
+                // get width and height of element hovered over
+                /* const width = hero.offsetWidth;
+                const height = hero.offsetHeight; */
+                // same as above destructured
+                const { offsetWidth: width, offsetHeight: height } = hero;
+                // where the cursor WAS
+                let { offsetX: x, offsetY: y } = e;
+
+                // accounts for if target is a child element to get proper mouse location
+                if (this !== e.target) {
+                    x = x + e.target.offsetLeft;
+                    y = y + e.target.offsetTop;
+                }
+                // 50 to -50 on edges
+                const xWalk = Math.round((x / width) * walk - walk / 2);
+                const yWalk = Math.round((y / height) * walk - walk / 2);
+
+                text.style.textShadow = `
+                  ${xWalk}px ${yWalk}px 0 red,
+                  ${xWalk * -1}px ${yWalk}px 0 blue,
+                  ${yWalk * -1}px ${xWalk}px 0 pink,
+                  ${yWalk}px ${xWalk}px 0 yellow
+
+
+                  `;
+            }
+
+            hero.addEventListener('mousemove', shadow);
+        </script>
     </body>
 </html>
