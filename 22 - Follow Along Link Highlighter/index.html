@@ -49,7 +49,37 @@
         </div>
 
         <script>
-            // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+            const triggers = document.querySelectorAll('a');
+            // make span element
+            const highlight = document.createElement('span');
+            // create class on the span
+            highlight.classList.add('highlight');
+            // put it into DOM
+            document.body.append(highlight);
+
+            // listen for user to highlight a link
+            function highlightLink() {
+                // use getBoundingClientRect() method to get coordinates of links
+                const linkCoords = this.getBoundingClientRect();
+                console.log(linkCoords);
+                const coords = {
+                    // use width and height from rect coordinated to create the highlight size
+                    width: linkCoords.width,
+                    height: linkCoords.height,
+                    // compensate for user scrolling
+                    top: linkCoords.top + window.scrollY,
+                    left: linkCoords.left + window.scrollX,
+                };
+
+                highlight.style.width = `${coords.width}px`;
+                highlight.style.height = `${coords.height}px`;
+                // use transition for smooth animations
+                highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`;
+            }
+
+            triggers.forEach(a =>
+                a.addEventListener('mouseenter', highlightLink)
+            );
         </script>
     </body>
 </html>
